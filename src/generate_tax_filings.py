@@ -1,6 +1,9 @@
 from datetime import datetime, timezone
 from random import choice, randint, uniform 
 from uuid import uuid4
+import json 
+from pathlib import Path
+
 
 
 
@@ -9,7 +12,8 @@ PAYMENT_STATUSES = ("PAID", "PENDING", "OVERDUE")
 COUNTIES = ("Nairobi", "Mombasa", "Kisumu", "Nakuru", "Uasin Gishu")
 
 def generate_valid_filing() -> dict[str, str | float]:
-    
+
+
     return {
         "filing_id": str(uuid4()),
         "taxpayer_id": f"SYN-TP-{randint(1, 999999):06d}",
@@ -22,9 +26,24 @@ def generate_valid_filing() -> dict[str, str | float]:
     
     }
     
+    
+def generate_valid_filings(count: int) -> list[dict[str,str | float]]:
+    return [generate_valid_filing() for _ in range(count)]
+    
 
+def write_filings_to_jsonl(
+    filings: list[dict[str, str | float]], output_path: Path
+) -> None:
+    with output_path.open("w", encoding="utf-8") as file:
+        for filing in filings:
+            file.write(json.dumps(filing) + "\n")
 
 
 
 if __name__ == "__main__":
-    print(generate_valid_filing())
+    #print(generate_valid_filings(3))
+    filings = generate_valid_filings(3)
+    output_path = Path("data/raw/synthetic_tax_filings.jsonl")
+    
+    write_filings_to_jsonl(filings, output_path)
+    print(f"Wrote {len(filings)} filings to {output_path}")
