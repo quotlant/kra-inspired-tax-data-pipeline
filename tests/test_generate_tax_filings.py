@@ -1,10 +1,10 @@
 import unittest
-from src.generate_tax_filings import generate_valid_filing
+from src.generate_tax_filings import generate_valid_filing, generate_valid_filings
 
 
 
 
-class TestGenerateTaxFilings (unittest.TestCase):
+class TestGenerateTaxFilings(unittest.TestCase):
     def test_record_has_all_contract_fields(self) -> None:
         record = generate_valid_filing()
         
@@ -21,7 +21,15 @@ class TestGenerateTaxFilings (unittest.TestCase):
     
         }
         
-        self.assertEqual(set(record), expected_fields)
+        self.assertEqual(set(record), expected_fields) 
+        
+        
+    def test_generates_requested_number_of_filings(self) -> None:
+        filings = generate_valid_filings(3)
+        
+        self.assertEqual(len(filings), 3)
+        
+        
         
         
         
