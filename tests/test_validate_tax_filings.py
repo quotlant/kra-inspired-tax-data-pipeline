@@ -22,3 +22,11 @@ class TestValidateTaxFilings(unittest.TestCase):
         
         self.assertIn("Declared tax amount must be positive", errors)
         
+        
+    def test_rejects_invalid_taxpayer_id(self) -> None:
+        filing = generate_valid_filing()
+        filing["taxpayer_id"] = ""
+        
+        errors = validate_filing(filing)
+        
+        self.assertIn("Taxpayer ID must use the SYN-TP- prefix", errors)
