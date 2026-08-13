@@ -30,3 +30,20 @@ class TestValidateTaxFilings(unittest.TestCase):
         errors = validate_filing(filing)
         
         self.assertIn("Taxpayer ID must use the SYN-TP- prefix", errors)
+        
+    def test_rejects_invalid_filing_period(self) -> None:
+        filing = generate_valid_filing()
+        filing["filing_period"] = "2026-13"
+        
+        errors = validate_filing(filing)
+        
+        self.assertIn("Filing period must use YYYY-MM format", errors)
+        
+        
+    def test_accepts_valid_filing(self) -> None:
+        filing = generate_valid_filing()
+        
+        errors = validate_filing(filing)
+        
+        self.assertEqual(errors, [])
+        
