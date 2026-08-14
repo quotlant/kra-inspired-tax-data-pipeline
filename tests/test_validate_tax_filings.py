@@ -1,6 +1,11 @@
 import unittest
 from src.generate_tax_filings import generate_valid_filing
 from src.validate_tax_filings import validate_filing
+from src.validate_tax_filings import (
+    validate_filing,
+    split_filings_by_validity,
+    )
+
 
 
 
@@ -47,3 +52,20 @@ class TestValidateTaxFilings(unittest.TestCase):
         
         self.assertEqual(errors, [])
         
+        
+    def test_splits_valid_and_rejected_filings(self) -> None:
+        valid_filing = generate_valid_filing()
+        invalid_filing = generate_valid_filing()
+        invalid_filing["tax_type"] = "EXCISE_DUTY"
+        
+        valid_filings, rejected_filings = split_filings_by_validity(
+            [valid_filing, invalid_filing]
+        )
+        
+        self.assertEqual(len(valid_filings), 1)
+        self.assertEqual(len(rejected_filings), 1)
+        self.assertEqual(rejected_filings[0]["filing"],invalid_filing)
+        self.assertEqual(
+            rejected_filings[0]["validation_errors"],
+            ["unsupported tax type"],
+        )

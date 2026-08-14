@@ -36,7 +36,30 @@ def validate_filing(filing: dict[str, object]) -> list[str]:
         except ValueError:
             errors.append("Filing period must use YYYY-MM format")
         
-   
+
         
     return errors
 
+
+def split_filings_by_validity (
+    filings: list[dict[str,object]]
+) -> tuple[list[dict[str,object]], list[dict[str,object]]]:
+    """separate filings into valid and rejected records with error details."""
+    valid_filings: list[dict[str,object]] = []
+    rejected_filings: list[dict[str, object]] = []
+    
+    for filing in filings:
+        errors = validate_filing(filing)
+        
+        if errors:
+            rejected_filings.append(
+                {
+                    "filings": filing,
+                    "validation_error": errors,                }
+            )
+            
+        else:
+            valid_filings.append(filing)
+            
+    return valid_filings, rejected_filings
+    
