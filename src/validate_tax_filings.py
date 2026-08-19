@@ -54,8 +54,8 @@ def split_filings_by_validity (
         if errors:
             rejected_filings.append(
                 {
-                    "filings": filing,
-                    "validation_error": errors,                }
+                    "filing": filing,
+                    "validation_errors": errors,                }
             )
             
         else:

@@ -2,7 +2,11 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from src.generate_tax_filings import generate_valid_filings, write_filings_to_jsonl
+from src.generate_tax_filings import (
+    generate_valid_filing,
+    generate_valid_filings, 
+    write_filings_to_jsonl
+)
 from src.process_tax_filings import (
     read_filings_from_jsonl,
     process_filings_from_jsonl,

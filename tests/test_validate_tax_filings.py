@@ -1,6 +1,5 @@
 import unittest
 from src.generate_tax_filings import generate_valid_filing
-from src.validate_tax_filings import validate_filing
 from src.validate_tax_filings import (
     validate_filing,
     split_filings_by_validity,
@@ -67,5 +66,6 @@ class TestValidateTaxFilings(unittest.TestCase):
         self.assertEqual(rejected_filings[0]["filing"],invalid_filing)
         self.assertEqual(
             rejected_filings[0]["validation_errors"],
-            ["unsupported tax type"],
+            ["Unsupported tax type"],
         )
+        

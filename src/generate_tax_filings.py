@@ -28,12 +28,11 @@ def generate_valid_filing() -> dict[str, str | float]:
         "submitted_at": datetime.now(timezone.utc).isoformat(), # Use UTC so timestamps remain consistent across environments.
     
     }
-    
+
 
 #return 'count' indepedently generated valid filing records  
 def generate_valid_filings(count: int) -> list[dict[str,str | float]]:
     return [generate_valid_filing() for _ in range(count)]
-    
 
 #write filings to a JSONL file, one JSON object per line
 def write_filings_to_jsonl(
