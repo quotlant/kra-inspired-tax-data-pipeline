@@ -10,6 +10,8 @@ from src.generate_tax_filings import (
 from src.process_tax_filings import (
     read_filings_from_jsonl,
     process_filings_from_jsonl,
+    process_and_write_filings
+    
 )
 
 
@@ -45,3 +47,31 @@ class TestProcessTaxFilings(unittest.TestCase):
             self.assertEqual(valid_filings, [valid_filing])
             self.assertEqual(rejected_filings[0]["filing"], invalid_filing)
             
+            
+    def test_writes_valid_and_rejected_filings(self) -> None:
+        valid_filing = generate_valid_filing()
+        invalid_filing = generate_valid_filing()
+        invalid_filing["tax_type"] = "EXCISE_DUTY"
+        
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            input_path = Path(temporary_directory) / "filings.jsonl"
+            valid_output_path = Path(temporary_directory) / "valid_filings.jsonl"
+            rejected_output_path = Path(temporary_directory) / "rejected_filings.jsonl"
+            
+            write_filings_to_jsonl(
+                [valid_filing, invalid_filing],
+                input_path
+            )
+            
+            process_and_write_filings(
+                input_path,
+                valid_output_path,
+                rejected_output_path
+            )
+            
+            actual_valid_filings = read_filings_from_jsonl(valid_output_path)
+            actual_rejected_filings = read_filings_from_jsonl(rejected_output_path)
+            
+        
+            self.assertEqual(actual_valid_filings, [valid_filing])
+            self.assertEqual(actual_rejected_filings[0]["filing"], invalid_filing)
